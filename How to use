@@ -1,0 +1,26 @@
+The program generates a master directory, this contains a directory for every configuration, each one contains INCAR, POTCAR, KPOINTS  and POSCAR file, ready to run.
+Open the adsorption.sh file with any text editor (e.g. Vi). Edit the input data. Each variable will be explained in  next section.
+
+Nit: Is the number of configurations over each point around the cluster
+Ntheta: Number of steps around the cluster in theta (usual spherical coordinates)
+Nphi: Number of steps around the cluster in phi (usual spherical coordinates)
+
+rsep : Maximum separation between the cluster  surface and molecule
+
+Project_Name: The nme of the master directory before mentioned
+Pseudo_Dir: The path where the VASP-pseudopotentials are located. The program use this path to generate to POTCAR file
+pseudotype:      For example, if you want to use  the GW Gold VASP pseudopotential  (Au_GW) just write _GW [pseudotype=_GW]
+                 If  you want to use the "Au_sv_GW" pseudopotential write "pseudoype=_sv_GW"  or blank for PBE
+Scale_factor: For POSCAR file
+Vect1, Vect2, Vect3: Row vectors of matrix cell. Necessaries for POSCAR file.
+
+
+For example:
+
+Vect1=" 35.0000000   0.0000000    0.0000000  "  
+Vect2=" 0.0000000   35.0000000    0.0000000  "
+Vect3=" 0.0000000   0.0000000    35.0000000  "
+
+IncarFile: This is path of  the INCAR file you want to use for your calculations. Will be copied to every directory 
+KpointsFile: Idem
+The  atomic positions will be readed  from molecule.xyz and cluster.xyz. Copy the coordinates to these files
