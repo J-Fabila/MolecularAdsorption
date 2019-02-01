@@ -11,7 +11,7 @@ We implemented a random search global optimization C / Bash code – coupled to 
 
 4)    In this work, only zwitterionic cysteine/Au systems are analyzed and considered for further classification.
 
-XXXXXX insert Figure 1 here! XXXXXX
+![figure1](https://user-images.githubusercontent.com/46831682/52142111-6318fd80-261d-11e9-9cc9-6ce3e952d0e0.png)
 
 Implemented in spherical coordinates, r variable modules the cysteine to Au cluster surface distance (e.g r=0 implies that the cysteine molecule is “touching” the Au cluster). In our code, the elevation (90°) and inclination (180°) angles are divided by Nφ and Nθ variables. This gives a (Nφ x Nθ) number of possible adsorption sites for the cysteine molecule around the Au cluster. 
 
