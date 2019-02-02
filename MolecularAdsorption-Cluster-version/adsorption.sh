@@ -268,6 +268,12 @@ done
 cd ..
 
 
+#The next part of the code is responsible for running each configuration
+#and analyzing the corresponding energies. I leave it commented
+#with the intention that you can run the code without a supercomputer,
+#so it will only generate the initial
+
+
 
 cd $Project_Name
 for m in $(ls)
