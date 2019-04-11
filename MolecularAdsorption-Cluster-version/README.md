@@ -5,7 +5,7 @@ The program generates a master directory, this contains a directory for every co
 ## How to use cluster-version
 
 The  atomic positions will be readed  from molecule.xyz and cluster.xyz. Copy the coordinates to these files.
-Open the adsorption.sh file with any text editor (e.g. Vi). Edit the input data. Each variable will be explained in  next section. *N.B.* As shell code the assignment of values to the variables must not contain empty spaces, *i.e.* "Nit=20" and not "Nit   =    20"
+Open the adsorption.sh file with any text editor (e.g. Vi). Edit the input data. Each variable will be explained in  next section. *N.B.* Bash does not recognize the empty spaces, so you must write "Nit=20" and not "Nit   =    20"
 
 **Nit** Is the number of configurations over each point around the cluster
 
