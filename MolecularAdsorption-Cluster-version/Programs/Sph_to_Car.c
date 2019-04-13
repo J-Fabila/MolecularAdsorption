@@ -12,7 +12,7 @@ int main()
 
 scanf("%f %i %i %i %i",&r,&a,&b, &Ntheta, &Nphi);
 theta=(3.1415926535*a/(Ntheta+1));
-phi=(3.1415926535*b/Nphi);
+phi=(2*3.1415926535*b/Nphi);
 
 x=(r*sin(theta)*cos(phi));
 y=(r*sin(theta)*sin(phi));
