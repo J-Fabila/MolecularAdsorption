@@ -7,24 +7,24 @@
 
 Nit=10       #Number of configurations over each point around the cluster
 Ntheta=2                     #Number of steps around the cluster in theta
-Nphi=4                         #Number of steps around the cluster in phi
+Nphi=3                         #Number of steps around the cluster in phi
 
 rsep=0       #Maximun separation (A) between cluster surface and molecule
 
 
 #/************************ VASP CONFIGURATION ************************/#
 
-Project_Name=Test                       #A new directory will be created
-Pseudo_Dir=                                   #Necessary for POTCAR file
+Project_Name=TEST              #A new directory will be created
+Pseudo_Dir=/home/lopb_g/jrff_a/tmpu/VASP/pseudos   #Necessary for POTCAR file
 pseudotype=                                               #Blank for PBE
-Vect1=" 35.0000000   0.0000000    0.0000000  "  #Vectors for POSCAR file
-Vect2=" 0.0000000   35.0000000    0.0000000  "
-Vect3=" 0.0000000   0.0000000    35.0000000  "
+Vect1=" 25.0000000   0.0000000    0.0000000  "  #Vectors for POSCAR file
+Vect2=" 0.0000000   25.0000000    0.0000000  "
+Vect3=" 0.0000000   0.0000000    25.0000000  "
 Scale_factor=1
 
-IncarFile=/home/Cluster-version/INCAR  #This file will be copied to each
+IncarFile=/home/lopb_g/jrff_a/Cisteina/vcluster/MolecularAdsorption-Cluster-version/INCAR  #This file will be copied to each
                                                      #configuration file
-KpointsFile=/home/Cluster-version/KPOINTS        #Will be copied to each
+KpointsFile=/home/lopb_g/jrff_a/Cisteina/vcluster/MolecularAdsorption-Cluster-version/KPOINTS        #Will be copied to each
                                                      #configuration file
 
 
@@ -185,7 +185,7 @@ echo " " >> POSCAR
 for((i=1;i<$(($Ntyp+1));i++))
  do
  S=$(head -$i $dir/Elements | tail -1)
-echo -n "$(grep "$S" configuration.xyz | wc -l )  ">>POSCAR
+echo -n "$(grep -w  "$S" configuration.xyz | wc -l )  ">>POSCAR
  done
 echo "  " >> POSCAR
 
@@ -193,8 +193,65 @@ echo "Cartesian ">> POSCAR
 for((i=1;i<$(($Ntyp+1));i++))
  do
  S=$(head -$i $dir/Elements | tail -1)
- grep  "$S" configuration.xyz | awk '{ print  $2, "  "  $3, "  "   $4 }' >> POSCAR
+ grep  -w "$S" configuration.xyz | awk '{ print  $2, "  "  $3, "  "   $4 }' >> POSCAR
  done
+
+
+#############################################################################
+######## LO SIGUIENTE CENTRA LAS COORDENADAS DEL POSCAR EN LA CELDA #########
+#############################################################################
+
+x1=$(echo $Vect1 | awk '{print $1}')
+y1=$(echo $Vect1 | awk '{print $2}')
+z1=$(echo $Vect1 | awk '{print $3}')
+
+mx1=$(echo "$x1/2" | bc)
+my1=$(echo "$y1/2" | bc)
+mz1=$(echo "$z1/2" | bc)
+
+x2=$(echo $Vect2 | awk '{print $1}')
+y2=$(echo $Vect2 | awk '{print $2}')
+z2=$(echo $Vect2 | awk '{print $3}')
+
+mx2=$(echo "$x2/2" | bc)
+my2=$(echo "$y2/2" | bc)
+mz2=$(echo "$z2/2" | bc)
+
+x3=$(echo $Vect3 | awk '{print $1}')
+y3=$(echo $Vect3 | awk '{print $2}')
+z3=$(echo $Vect3 | awk '{print $3}')
+
+mx3=$(echo "$x3/2" | bc)
+my3=$(echo "$y3/2" | bc)
+mz3=$(echo "$z3/2" | bc)
+
+nlp=$(($(cat POSCAR | wc -l )-8))
+tail -$nlp POSCAR >>coordsajustar
+nl=$(cat coordsajustar | wc -l)
+
+awk '{print $1 }' coordsajustar >> coordsx
+awk '{print $2 }' coordsajustar >> coordsy
+awk '{print $3 }' coordsajustar >> coordsz
+
+#paste coordsx coordsy coordsz
+
+for ((ajustar=1;ajustar<$(($nl+1));ajustar++))
+do
+echo "$(head -$ajustar coordsx | tail -1) +$mx1+$mx2+$mx3" | bc  >> Xajustada
+echo "$(head -$ajustar coordsy | tail -1) +$my1+$my2+$my3" | bc  >> Yajustada
+echo "$(head -$ajustar coordsz | tail -1) +$mz1+$mz2+$mz3" | bc  >> Zajustada
+done
+
+head -8 POSCAR >>aux
+rm POSCAR
+mv aux POSCAR
+paste Xajustada Yajustada Zajustada >> POSCAR
+
+
+rm Xajustada Yajustada Zajustada coordsajustar
+
+
+
 
 ##############################################################################
 ######  ESTE FOR ESTABA PENSADO PARA CONCATENAR LOS PSEUDOPOTENCIALES ########
