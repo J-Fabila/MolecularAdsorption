@@ -1,5 +1,5 @@
 # RANDOM SEARCH GLOBAL OPTIMIZATION C/BASH CODE
-
+(https://doi.org/10.1002/jrs.5782).
 We implemented a random search global optimization C / Bash code – coupled to the DFT software VASP - in order to explore the configurational space (PES) of the cysteine molecule adsorbed on both Au9 and Au34 clusters, via random displacements. ­The code works as follows:
 
 1)    For metal clusters and nanoparticles ( < 100 atoms ), the code generates a number of initial, random configurations starting from an initial configuration of an adsorbed cysteine molecule on both Au9 and Au34 clusters.
