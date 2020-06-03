@@ -1,8 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
+#include<time.h>
 
 int a,b, i, j, k, l, m,  n;
+float epsilon, delta, min, max;
 
 struct Atomo
 {
@@ -27,8 +29,16 @@ int main()
 scanf("%i %i %i %i %f %f %f", &Nm, &j, &k, &Nit, &CMolx, &CMoly, &CMolz);
 N=floor(sqrt(Nit/2));
 M=(2*N);
-theta= (3.1415926535*j/N);
-phi=(2*3.1415926535*k/M);
+//epsilon y delta son el elemento aleatorio del algoritmo
+max=(3.1415926535/(2*N));
+min=-max;
+epsilon=min+(float)rand()/((float)RAND_MAX / (max-min));
+theta= (3.1415926535*j/N)+epsilon;
+max=(3.1415926535/(2*M));
+min=-max;
+delta=min+(float)rand()/((float)RAND_MAX / ( max-min) );
+phi=(2*3.1415926535*k/M)+delta;
+
 //THETA=(3.1415926535*a/(Ntheta+1));
 //PHI=(3.1415926535*b/Nphi);
 FILE *f = fopen("coordCG.xyz", "r"); //Archivo de entrada
@@ -37,43 +47,6 @@ for(i=0;i<Nm;i++)
 {
 fscanf(f, "%s  %f  %f  %f\n", at[i].Simbolo, &at[i].x[0], &at[i].x[1], &at[i].x[2]);
 }
-/*
-// Matriz de rotacion alrededor de X //
-Rx[0][0]=1;
-Rx[1][0]=0;
-Rx[2][0]=0;
-Rx[0][1]=0;
-Rx[0][2]=0;
-Rx[1][1]=cos(theta);
-Rx[1][2]=(-sin(theta));
-Rx[2][1]=sin(theta);
-Rx[2][2]=cos(theta);
-// Matriz de rotacion alrededor de Z //
-Rz[0][0]=cos(phi);
-Rz[0][1]=(-sin(phi));
-Rz[0][2]=0,
-Rz[1][0]=sin(phi);
-Rz[1][1]=cos(phi);
-Rz[1][2]=0;
-Rz[2][0]=0;
-Rz[2][1]=0;
-Rz[2][2]=1;
-//Multiplica ambos operadores de rotacion //
-for(l=0;l<3; l++)
-   {
-   for(m=0;m<3;m++)
-      {
-      s=0;
-      for(n=0;n<3;n++)
-         {
-         s=s+(Rx[l][n]*Rz[n][m]);
-         }
-       Rot[l][m]=s;
-       }
-     }
-*/
-// Aplica el operador de rotacion sobre cada atomo //
-
 Rot[0][0]=cos(phi);
 Rot[0][1]=(-cos(theta)*sin(phi));
 Rot[0][2]=sin(phi)*sin(theta);
@@ -97,7 +70,7 @@ for(l=0;l<3;l++)
 }
 for(i=0;i<Nm;i++)
 {
- // Traslada las coordenadas rotadas sobre le sustrato //
+ // Traslada las coordenadas rotadas sobre el clúster //
 atTras[i].x[0]=atRot[i].x[0]+CMolx;
 atTras[i].x[1]=atRot[i].x[1]+CMoly;
 atTras[i].x[2]=atRot[i].x[2]+CMolz;
@@ -110,4 +83,3 @@ fprintf(g, "%s   %f   %f   %f \n ", at[i].Simbolo, atTras[i].x[0], atTras[i].x[1
 fclose(g);
 return 0;
 }
-
