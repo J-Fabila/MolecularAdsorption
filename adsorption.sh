@@ -5,9 +5,9 @@
 
 #/****************************** SYSTEM ******************************/#
 
-Nit=10       #Number of configurations over each point around the cluster
-Ntheta=2                     #Number of steps around the cluster in theta
-Nphi=3                         #Number of steps around the cluster in phi
+Nit=2      #Number of configurations over each point around the cluster
+Ntheta=4                     #Number of steps around the cluster in theta
+Nphi=16                         #Number of steps around the cluster in phi
 
 rsep=0       #Maximun separation (A) between cluster surface and molecule
 
@@ -15,16 +15,16 @@ rsep=0       #Maximun separation (A) between cluster surface and molecule
 #/************************ VASP CONFIGURATION ************************/#
 
 Project_Name=TEST              #A new directory will be created
-Pseudo_Dir=/home/lopb_g/jrff_a/tmpu/VASP/pseudos   #Necessary for POTCAR file
+Pseudo_Dir=pseudos   #Necessary for POTCAR file
 pseudotype=                                               #Blank for PBE
 Vect1=" 25.0000000   0.0000000    0.0000000  "  #Vectors for POSCAR file
 Vect2=" 0.0000000   25.0000000    0.0000000  "
 Vect3=" 0.0000000   0.0000000    25.0000000  "
 Scale_factor=1
 
-IncarFile=/home/lopb_g/jrff_a/Cisteina/vcluster/MolecularAdsorption-Cluster-version/INCAR  #This file will be copied to each
+IncarFile=INCAR  #This file will be copied to each
                                                      #configuration file
-KpointsFile=/home/lopb_g/jrff_a/Cisteina/vcluster/MolecularAdsorption-Cluster-version/KPOINTS        #Will be copied to each
+KpointsFile=KPOINTS        #Will be copied to each
                                                      #configuration file
 
 
@@ -117,9 +117,9 @@ Rtot=$(cat  Distanciatotal)
 rm Distanciatotal
 cd ..
 ########### TRASLACIONES DEL CLUSTER ###########
-contador=0
+contador=1
 cd $Project_Name
-for((a=1;a<$(($Ntheta+1));a++))
+for((a=1;a<$(($Ntheta));a++))
 do
 for((b=0;b<$Nphi;b++))
 do
@@ -168,7 +168,7 @@ cat $KpointsFile >> KPOINTS
 ############################################################################
 ###################  LO SIGUIENTE ESCRIBE EL POSCAR ########################
 ############################################################################
-echo "Iteracion $contador "  >>POSCAR
+echo "Iteracion $(($contador-1)) "  >>POSCAR
 
 echo "$Scale_factor" >> POSCAR
 echo "$Vect1">> POSCAR
@@ -248,7 +248,7 @@ mv aux POSCAR
 paste Xajustada Yajustada Zajustada >> POSCAR
 
 
-rm Xajustada Yajustada Zajustada coordsajustar
+rm Xajustada Yajustada Zajustada coordsajustar coordsx coordsy coordsz
 
 
 
