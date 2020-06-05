@@ -14,20 +14,26 @@ rsep=0       #Maximun separation (A) between cluster surface and molecule
 N_cores=32     #Número de cores  entre los que se paralelizará con mpirun
                                     #es decir: mpirun -np N_cores vasp5.6
 
+queue=q_residual
+
 #/************************ VASP CONFIGURATION ************************/#
 
 Project_Name=TEST              #A new directory will be created
-Pseudo_Dir=pseudos   #Necessary for POTCAR file
+
+Pseudo_Dir=/home/lopb_g/jrff_a/tmpu/VASP/pseudos   #Necessary for POTCAR file
+
 pseudotype=                                               #Blank for PBE
 Vect1=" 25.0000000   0.0000000    0.0000000  "  #Vectors for POSCAR file
 Vect2=" 0.0000000   25.0000000    0.0000000  "
 Vect3=" 0.0000000   0.0000000    25.0000000  "
 Scale_factor=1
 
-IncarFile=INCAR  #This file will be copied to each
+IncarFile=/home/lopb_g/jrff_a/Cisteina/vcluster/MolecularAdsorption-Cluster-version/INCAR  #This file will be copied to each
                                                      #configuration file
-KpointsFile=KPOINTS        #Will be copied to each
+KpointsFile=/home/lopb_g/jrff_a/Cisteina/vcluster/MolecularAdsorption-Cluster-version/KPOINTS        #Will be copied to each
                                                      #configuration file
+
+
 
 
 
@@ -325,43 +331,7 @@ do
    fi
 done
 cd ..
-
-
-#The next part of the code is responsible for running each configuration
-#and analyzing the corresponding energies. I leave it commented
-#with the intention that you can run the code without a supercomputer,
-#so it will only generate the initial
-
-
-
-cd $Project_Name
-for m in $(ls)
-do
-   if [ -d $m ]
-   then
-      cd $m
-      #mpirun -np $Ncore vasp_gam > salida.out #OJO ACA
-#      echo $m
-      cd ..
-   fi
-done
-cd ..
-
-### Analizador de energías ###
-#cd $Nombre_del_proyecto
-#for m in $(ls)
-#do   if [ -d $m ]
-#   then
-#      cd $m
-#      energia=$(tail -1 OSZICAR)
-#      echo "$m $energia " >> ../Resumen_de_energias
-#      cd ..
-#   fi
-#done
-#cd ..
-rm Elements
-
-
+rm Elements 2> /dev/null
 
 cd $Project_Name
 echo "
@@ -393,9 +363,9 @@ do
 echo "
 
 #!/bin/bash
-#BSUB -q q_hpc
-#BSUB -oo output1
-#BSUB -eo error
+#BSUB -q $queue
+#BSUB -oo output$contador
+#BSUB -eo error$contador
 #BSUB -n $N_cores
 #BSUB -J Lote_N$contador
 module load use.own
@@ -417,9 +387,11 @@ do
    fi
 done
 
-"
+" > queue_$contador.sh
+chmod  +x queue_$contador.sh
+#bsub < queue_$contador.sh 
 
-contador=contador+1
+contador=$(($contador+1))
 done
 
 
