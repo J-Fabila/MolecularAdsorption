@@ -11,6 +11,8 @@ Nphi=16                         #Number of steps around the cluster in phi
 
 rsep=0       #Maximun separation (A) between cluster surface and molecule
 
+N_cores=32     #Número de cores  entre los que se paralelizará con mpirun
+                                    #es decir: mpirun -np N_cores vasp5.6
 
 #/************************ VASP CONFIGURATION ************************/#
 
@@ -358,3 +360,67 @@ cd ..
 #done
 #cd ..
 rm Elements
+
+
+
+cd $Project_Name
+echo "
+echo \"Configuration Convergence F E\"
+N=\$(ls | grep \"Configuration\" | wc -l)
+for ((i=0;i<\$((\$N+1));i++))
+do
+   cd Configuration$i
+   c=\$(grep \"reached\" salida* | wc -l )
+   echo -n  \"\$i\"
+   if [ \$c -eq  1 ]
+   then
+      echo -n \"  T  \"
+   else
+      echo -n \"  F  \"
+   fi
+   E=\$(tail -1 OSZICAR | awk '{print \$5}'  )
+   F=\$(tail -1 OSZICAR | awk '{print \$3}'  )
+   echo \"\$F  \$E \"
+   cd ..
+done 2> /dev/null
+
+" > energies.sh
+chmod +x energies.sh
+
+contador=1
+for ((i=0;i< $(($Nit*$Ntheta*$Nphi));i=i+5))
+do
+echo "
+
+#!/bin/bash
+#BSUB -q q_hpc
+#BSUB -oo output1
+#BSUB -eo error
+#BSUB -n $N_cores
+#BSUB -J Lote_N$contador
+module load use.own
+module load vasp/5.4.4
+
+#BSUB -R \"span[ptile=32]\"
+#BSUB -m \"g3_a g3_b\"
+
+N=\$(ls | grep \"Configuration\" | wc -l)
+for ((i=0;i<\$((\$N+1));i++))
+do
+   cd Configuration\$i
+   if [ -f OSZICAR ]
+   then
+      cd ..
+   else
+      mpirun -np $N_cores vasp_gam > salida.out
+      cd ..
+   fi
+done
+
+"
+
+contador=contador+1
+done
+
+
+cd ..
