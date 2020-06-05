@@ -389,7 +389,7 @@ done
 
 " > queue_$contador.sh
 chmod  +x queue_$contador.sh
-#bsub < queue_$contador.sh 
+bsub < queue_$contador.sh 
 
 contador=$(($contador+1))
 done
