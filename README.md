@@ -61,7 +61,7 @@ In Programs directory. Compile as follows:
 
 ```
 gcc -o CG CG.c -lm
-gcc -o cgclus cgclus.c -lm
+gcc -o Cgclus Cgclus.c -lm
 gcc -o N N.c -lm
 gcc -o Rtotal Rtotal.c -lm  
 gcc -o Sph_to_Car Sph_to_Car.c -lm
