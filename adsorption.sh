@@ -339,7 +339,7 @@ echo \"Configuration Convergence F E\"
 N=\$(ls | grep \"Configuration\" | wc -l)
 for ((i=1;i<\$((\$N+1));i++))
 do
-   cd Configuration\"\$i\"
+   cd Configuration\$i
    c=\$(grep \"reached\" salida* | wc -l )
    echo -n  \"\$i\"
    if [ \$c -eq  1 ]
