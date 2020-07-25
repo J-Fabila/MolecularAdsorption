@@ -375,7 +375,7 @@ module load vasp/5.4.4
 #BSUB -m \"g3_a g3_b\"
 
 N=\$(ls | grep \"Configuration\" | wc -l)
-for ((i=0;i<\$((\$N+1));i++))
+for ((i=1;i<\$((\$N+1));i++))
 do
    cd Configuration\$i
    if [ -f OSZICAR ]
