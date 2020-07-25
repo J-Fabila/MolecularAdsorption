@@ -337,7 +337,7 @@ cd $Project_Name
 echo "
 echo \"Configuration Convergence F E\"
 N=\$(ls | grep \"Configuration\" | wc -l)
-for ((i=0;i<\$((\$N+1));i++))
+for ((i=1;i<\$((\$N+1));i++))
 do
    cd Configuration$i
    c=\$(grep \"reached\" salida* | wc -l )
