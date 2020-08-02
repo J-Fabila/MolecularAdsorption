@@ -378,7 +378,7 @@ N=\$(ls | grep \"Configuration\" | wc -l)
 for ((i=1;i<\$((\$N+1));i++))
 do
    cd Configuration\$i
-   if [ -f OSZICAR ]
+   if [ -f salida.out ]
    then
       cd ..
    else
